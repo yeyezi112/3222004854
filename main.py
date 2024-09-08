@@ -1,4 +1,5 @@
 import os
+import re
 import sys
 
 #读取文件
@@ -8,12 +9,21 @@ def read_file(file_path):
 
 #计算相似度
 def calculate_similarity(original, original_add):
-    # 将文本分词，这里简单地以单个汉字为单位
-    original_words = set(original.replace(' ', ''))
-    original_add_words = set(original_add.replace(' ', ''))
+    #将文本用列表保存，并去掉其中标点符号
+    original_clean = re.sub(r'[^\w\s]', '', original)
+    original_clean = re.sub(r'\n', '', original_clean)
+    original_add_clean = re.sub(r'[^\w\s]', '', original_add)
 
-    # 计算两个集合的交集
-    common_words = original_words.intersection(original_add_words)
+    # 将文本分词，这里简单地以单个汉字为单位
+    original_words = list(original_clean)
+    original_add_words = list(original_add_clean)
+
+    print(original_words)
+    print(original_add_words)
+
+    # 计算两个列表的交集
+    common_words = [j for j in original_words if j in original_add_words]
+    print(common_words)
 
     # 计算相似度
     similarity = (2 * len(common_words)) / (len(original_words) + len(original_add_words))
@@ -26,6 +36,7 @@ def write_result(result_file, similarity):
 
 #main函数
 def main():
+    #读取文件
     if len(sys.argv) != 4:
         for arg in sys.argv:
             print(arg)
@@ -43,6 +54,7 @@ def main():
     original_text = read_file(original_path)
     original_add_text = read_file(original_add_path)
 
+    #计算相似度并输出
     similarity = calculate_similarity(original_text, original_add_text)
     print(f"{similarity * 100:.0f}%")
     write_result(result_path, similarity)
