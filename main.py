@@ -1,5 +1,6 @@
 import os
 import re
+import jieba
 import sys
 
 #读取文件
@@ -14,16 +15,19 @@ def calculate_similarity(original, original_add):
     original_clean = re.sub(r'\n', '', original_clean)
     original_add_clean = re.sub(r'[^\w\s]', '', original_add)
 
-    # 将文本分词，这里简单地以单个汉字为单位
-    original_words = list(original_clean)
-    original_add_words = list(original_add_clean)
+    # 使用jieba进行中文分词
+    original_words = list(jieba.cut(original))
+    original_add_words = list(jieba.cut(original_add))
 
+    """
     print(original_words)
     print(original_add_words)
+    """
 
     # 计算两个列表的交集
-    common_words = [j for j in original_words if j in original_add_words]
-    print(common_words)
+    common_words = [word for word in original_words if word in original_add_words]
+
+    #print(common_words)
 
     # 计算相似度
     similarity = (2 * len(common_words)) / (len(original_words) + len(original_add_words))
