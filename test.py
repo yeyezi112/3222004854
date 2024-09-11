@@ -47,7 +47,7 @@ class MyTestCase(unittest.TestCase):
 
     #调整语序
     def test_order(self):
-        self.assertEqual(calculate_similarity('我已经学习和练习Linux。', '我已经练习和学习Linux。'), 1)
+        self.assertGreater(calculate_similarity('我已经学习和练习Linux。', '我已经练习和学习Linux。'), 0.7)
 
     #空白输入
     def test_empty(self):
@@ -55,10 +55,11 @@ class MyTestCase(unittest.TestCase):
 
     #文件路径错误
     def test_nullfile(self):
-        result = subprocess.run(['python', 'D:\大三上\Homework\main.py', '--param1', 'D:\大三上\\ruangong_test\original.txt',
-                         '--param2', 'D:\大三上\\ruangong_test\original_add1.txt',
-                         '--param3', 'D:\大三上\\ruangong_test\similarity.txt'
-                ], stdout=subprocess.PIPE)
+        result = subprocess.run(
+            ['python', 'D:\大三上\Homework\main.py', '--param1', 'D:\大三上\\ruangong_test\original.txt',
+             '--param2','D:\大三上\\ruangong_test\original_add1.txt',
+             '--param3', 'D:\大三上\\ruangong_test\similarity.txt'
+             ], stdout=subprocess.PIPE)
         stdout = result.stdout.decode
         print(stdout)
 

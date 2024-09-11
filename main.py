@@ -1,3 +1,4 @@
+import difflib
 import os
 import re
 import jieba
@@ -25,13 +26,17 @@ def calculate_similarity(original, original_add):
     """
 
     # 计算两个列表的交集
-    common_words = [word for word in original_words if word in original_add_words]
+    #common_words = [word for word in original_words if word in original_add_words]
 
     #print(common_words)
 
     # 计算相似度
-    similarity = (2 * len(common_words)) / (len(original_words) + len(original_add_words))
+    #similarity = (2 * len(common_words)) / (len(original_words) + len(original_add_words))
+
+    # 使用difflib.SequenceMatcher计算相似度比例，并四舍五入到两位小数
+    similarity = round(difflib.SequenceMatcher(None, original_words, original_add_words).ratio(), 2)
     return similarity
+
 
 #输出结果
 def write_result(result_file, similarity):
@@ -51,7 +56,8 @@ def main():
     original_add_path = sys.argv[2]
     result_path = sys.argv[3]
 
-    if not os.path.isfile(original_path) or not os.path.isfile(original_add_path):
+    #文件路径不存在
+    if not os.path.isfile(original_path) or not os.path.isfile(original_add_path) or not os.path.isfile(result_path):
         print("Error: One of the provided file paths does not exist.")
         sys.exit(1)
 
