@@ -99,11 +99,15 @@ def grade(args):
         wrong = []
         # 遍历题目和答案的每一对，并使用enumerate来跟踪编号
         for i, (exercise, answer) in enumerate(zip(exercises, answers), 1):
-            # 去除题目和答案两端的空白字符
-            exercise = exercise.strip()
-            answer = answer.strip()
+            # 去除题目和答案的编号
+            exercise = exercise.split(".", 1)
+            exercise = exercise[1].strip()
+            # 去除题目的‘=’号
+            exercise = exercise.split('=')[0].strip()
+            answer = answer.split(".", 1)
+            answer = answer[1].strip()
             # 如果计算出的题目结果等于答案文件中的答案，则标记为正确
-            if calculate_expression(exercise.split('=')[0].strip()) == answer:
+            if calculate_expression(exercise) == answer:
                 correct.append(i)
             else:
                 # 否则标记为错误
@@ -121,7 +125,7 @@ def main():
     # 添加参数'-n'，指定生成题目的数量，类型为整数
     parser.add_argument('-n', type=int, help='Number of exercises to generate')
     # 添加参数'-r'，指定题目中数值的最大范围，类型为整数，并且是必须提供的参数
-    parser.add_argument('-r', type=int, required=True, help='Maximum value for numbers in exercises')
+    parser.add_argument('-r', type=int, help='Maximum value for numbers in exercises')
     # 添加参数'-e'，指定题目文件，类型为字符串
     parser.add_argument('-e', type=str, help='Exercise file')
     # 添加参数'-a'，指定答案文件，类型为字符串
