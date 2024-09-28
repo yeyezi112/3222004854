@@ -133,6 +133,11 @@ def main():
     # 解析命令行参数
     args = parser.parse_args()
 
+    args.n = 10000
+    args.r = 10
+    #args.e = 'Exercises.txt'
+    #args.a = 'Answers_profile.txt'
+
     # 如果提供了'-e'和'-a'参数，则进入评分模式
     if args.e and args.a:
         grade(args)
